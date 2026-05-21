@@ -1,0 +1,138 @@
+1.  <program> ===> <otherFunctions> <mainFunction>
+
+2.  <otherFunctions> ===> <function> <otherFunctions>
+                          | ε
+
+3.  <mainFunction> ===> TK_MAIN <stmts> TK_END
+
+4.  <function> ===> TK_FUNID <input_par> <output_par> ';' <stmts> TK_END
+
+5.  <input_par> ===> TK_INPUT TK_PARAMETER TK_LIST '[' <parameter_list> ']'
+
+6.  <output_par> ===> TK_OUTPUT TK_PARAMETER TK_LIST '[' <parameter_list> ']'
+                      | ε
+
+7.  <parameter_list> ===> <dataType> TK_ID <remaining_list>
+
+8.  <remaining_list> ===> ',' <dataType> TK_ID <remaining_list>
+                          | ε
+
+9.  <dataType> ===> <primitiveDatatype>
+                    | <constructedDatatype>
+
+10. <primitiveDatatype> ===> TK_INT
+                             | TK_REAL
+
+11. <constructedDatatype> ===> TK_RECORD TK_RUID
+                               | TK_UNION TK_RUID
+
+12. <stmts> ===> <typeDefinitions> <declarations> <otherStmts> <returnStmt>
+
+13. <typeDefinitions> ===> <typeDefinition> <typeDefinitions>
+                           | ε
+
+14. <typeDefinition> ===> TK_RECORD TK_RUID <fieldDefinitions> TK_ENDRECORD
+                           | TK_UNION TK_RUID <fieldDefinitions> TK_ENDUNION
+
+15. <fieldDefinitions> ===> <fieldDefinition> <fieldDefinition> <moreFields>
+
+16. <moreFields> ===> <fieldDefinition> <moreFields>
+                       | ε
+
+17. <fieldDefinition> ===> TK_TYPE <primitiveDatatype> ':' TK_FIELDID ';'
+
+18. <declarations> ===> <declaration> <declarations>
+                         | ε
+
+19. <declaration> ===> TK_TYPE <dataType> ':' TK_ID <global_or_not> ';'
+
+20. <global_or_not> ===> ':' TK_GLOBAL
+                          | ε
+
+21. <otherStmts> ===> <stmt> <otherStmts>
+                       | ε
+
+22. <stmt> ===> <assignmentStmt>
+                 | <iterativeStmt>
+                 | <conditionalStmt>
+                 | <ioStmt>
+                 | <funCallStmt>
+
+23. <assignmentStmt> ===> <singleOrRecId> TK_ASSIGNOP <arithmeticExpression> ';'
+
+24. <singleOrRecId> ===> TK_ID <recTail>
+
+25. <recTail> ===> '.' TK_FIELDID
+                    | ε
+
+26. <funCallStmt> ===> <outputParameters> TK_CALL TK_FUNID TK_WITH
+                       TK_PARAMETERS <inputParameters> ';'
+
+27. <outputParameters> ===> '[' <idList> ']' TK_ASSIGNOP
+                             | ε
+
+28. <inputParameters> ===> '[' <idList> ']'
+
+29. <iterativeStmt> ===> TK_WHILE '(' <booleanExpression> ')'
+                          <stmt> <otherStmts> TK_ENDWHILE
+
+30. <conditionalStmt> ===> TK_IF <booleanExpression> TK_THEN
+                            <stmt> <otherStmts> <elsePart> TK_ENDIF
+
+31. <elsePart> ===> TK_ELSE <otherStmts>
+                     | ε
+
+32. <arithmeticExpression> ===> <term> <aePrime>
+
+33. <aePrime> ===> '+' <term> <aePrime>
+                    | '-' <term> <aePrime>
+                    | ε
+
+34. <term> ===> <factor> <tPrime>
+
+35. <tPrime> ===> '*' <factor> <tPrime>
+                   | '/' <factor> <tPrime>
+                   | ε
+
+36. <factor> ===> '(' <arithmeticExpression> ')'
+                   | <var>
+
+37. <booleanExpression> ===> <boolTerm> <bePrime>
+
+38. <bePrime> ===> <logicalOp> <boolTerm> <bePrime>
+                    | ε
+
+39. <boolTerm> ===> TK_NOT <boolTerm>
+                     | '(' <booleanExpression> ')'
+                     | <relExpr>
+
+40. <relExpr> ===> <var> <relationalOp> <var>
+
+41. <var> ===> TK_ID
+                | TK_NUM
+                | TK_RNUM
+
+42. <logicalOp> ===> TK_AND
+                      | TK_OR
+
+43. <relationalOp> ===> TK_LT
+                         | TK_LE
+                         | TK_EQ
+                         | TK_GT
+                         | TK_GE
+                         | TK_NE
+
+44. <returnStmt> ===> TK_RETURN <optionalReturn> ';'
+
+45. <optionalReturn> ===> '[' <idList> ']'
+                           | ε
+
+46. <idList> ===> TK_ID <more_ids>
+
+47. <more_ids> ===> ',' <idList>
+                     | ε
+
+48. <definetypestmt> ===> TK_DEFINETYPE <typeKind> TK_RUID TK_AS TK_RUID ';'
+
+49. <typeKind> ===> TK_RECORD
+                     | TK_UNION
